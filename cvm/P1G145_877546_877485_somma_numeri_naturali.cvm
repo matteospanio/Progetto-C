@@ -1,0 +1,86 @@
+; SOMMA NUMERI NATURALI
+; Questo programma somma i primi n numeri naturali (0, 1, 2, 3...).
+; Verranno stampati su console vari numeri:
+; (1) il numero n di numeri naturali da sommare
+; (2) gli n numeri naturali da sommare
+; (3) la somma complessiva
+
+; TEST
+; Per provare il programma con altri valori di n modificare la riga [2].
+; La somma va in overflow per n >= 65537
+; Per n negativi, il programma restituisce come somma -1
+
+; REGISTRI UTILIZZATI:
+; R0    numero n di numeri naturali da sommare
+; R1    numero naturale da sommare
+; R2    1, costante
+; R3    somma dei vari numeri naturali
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 10    PUSH
+; 11    POP
+; 12    MOV
+; 20    CALL
+; 21    RET
+; 22    JMP
+; 23    JZ
+; 25    JNEG
+; 30    ADD
+; 31    SUB
+
+46  ; numero linee di codice macchina
+
+; main
+12  ; [0] MOV R0 n          R0 = n
+0   ; [1]
+7   ; [2]
+1   ; [3] DISPLAY R0        Stampa n
+0   ; [4]
+20  ; [5] CALL 10           CALL somma_naturali
+10  ; [6]
+1   ; [7] DISPLAY R3        Stampa R3
+3   ; [8]
+0   ; [9] HALT              Fine programma
+
+;somma_naturali:
+10  ; [10] PUSH R0          if R0 < 0
+0   ; [11]
+25  ; [12] JNEG 42          JMP errore
+42  ; [13]
+12  ; [14] MOV R1 0         R1 = 0
+1   ; [15]
+0   ; [16]
+12  ; [17] MOV R2 1         R2 = 1
+2   ; [18]
+1   ; [19]
+12  ; [20] MOV R3 0         R3 = 0
+3   ; [21]
+0   ; [22]
+;inizio
+31  ; [23] SUB R0 R1        if (R0 - R1) = 0
+0   ; [24]
+1   ; [25]
+23  ; [26] JZ 45            JMP fine
+45  ; [27]
+1   ; [28] DISPLAY R1       Stampa R1
+1   ; [29]
+30  ; [30] ADD R3 R1        R3 = R3 + R1
+3   ; [31]
+1   ; [32]
+11  ; [33] POP R3
+3   ; [34]
+30  ; [35] ADD R1 R2        R1 = R1 + R2
+1   ; [36]
+2   ; [37]
+11  ; [38] POP R1
+1   ; [39]
+22  ; [40] JMP 23           JMP inizio
+23  ; [41]
+;errore:
+12  ; [42] MOV R3 -1        R3 = -1
+3   ; [43]
+-1  ; [44]
+;fine:
+21  ; [45] RET              Termine funzione

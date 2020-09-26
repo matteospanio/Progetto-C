@@ -1,0 +1,116 @@
+; SUCCESSIONE AUREA
+; Questo programma stampa i primi n numeri della successione aurea (sequenza di Fibonacci).
+; Verranno stampati su console vari numeri:
+; (1) il numero n di elementi della successione che vogliamo stampare
+; (2) gli n elementi della successione
+
+; Successione Aurea:
+; SA1 = 1
+; SA2 = 1
+; SAn = SA(n-1) + SA(n-2)
+
+; TEST
+; Per provare il programma con altri valori di n modificare la riga [2].
+; Il programma va in overflow per n >= 48
+; Per n negativi, il programma restituisce come somma -1
+; Per n = 0, il programma termina senza stampare niente.
+
+; REGISTRI UTILIZZATI:
+; R0    numero n di elementi della successione aurea da determinare
+; R1    conta quanti elementi della serie abbiamo già stampato
+; R2    elemento (n-2)-esimo della successione aurea
+; R3    elemento (n-1)-esimo della successione aurea
+; R4    elemento n-esimo della successione aurea
+; R10   1, costante
+; R30   -1, in caso di errore
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 10    PUSH
+; 11    POP
+; 12    MOV
+; 22    JMP
+; 23    JZ
+; 25    JNEG
+; 30    ADD
+; 31    SUB
+
+72  ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 n      R0 = n
+0   ; [1]
+7   ; [2]
+1   ; [3] DISPLAY R0    Stampa n
+0   ; [4]
+10  ; [5] PUSH R0       if R0 < 0
+0   ; [6]
+25  ; [7] JNEG 66       JMP errore
+66  ; [8]
+10  ; [9] PUSH R0       if R0 = 0
+0   ; [10]
+23  ; [11] JZ 71        JMP fine
+71  ; [12]
+12  ; [13] MOV R1 1     R1 = 1
+1   ; [14]
+1   ; [15]
+12  ; [16] MOV R2 1     R2 = 1
+2   ; [17]
+1   ; [18]
+1   ; [19] DISPLAY R2   Stampa R2
+2   ; [20]
+31  ; [21] SUB R0 R1    if (R0 - R1 = 0)
+0   ; [22]
+1   ; [23]
+23  ; [24] JZ 71        JMP fine
+71  ; [25]
+12  ; [26] MOV R10 1    R10 = 1
+10  ; [27]
+1   ; [28]
+30  ; [29] ADD R1 R10   R1 = R1 + R10
+1   ; [30]
+10  ; [31]
+11  ; [32] POP R1
+1   ; [33]
+12  ; [34] MOV R3 1     R3 = 1
+3   ; [35]
+1   ; [36]
+1   ; [37] DISPLAY R3   Stampa R3
+3   ; [38]
+;inizio:
+31  ; [39] SUB R0 R1    if (R0 - R1 = 0)
+0   ; [40]
+1   ; [41]
+23  ; [42] JZ 71        JMP fine
+71  ; [43]
+30  ; [44] ADD R2 R3    R4 = R2 + R3
+2   ; [45]
+3   ; [46]
+11  ; [47] POP R4
+4   ; [48]
+10  ; [49] PUSH R3      R2 = R3
+3   ; [50]
+11  ; [51] POP R2
+2   ; [52]
+10  ; [53] PUSH R4      R3 = R4
+4   ; [54]
+11  ; [55] POP R3
+3   ; [56]
+1   ; [57] DISPLAY R4   Stampa R4
+4   ; [58]
+30  ; [59] ADD R1 R10   R1 = R1 + R10
+1   ; [60]
+10  ; [61]
+11  ; [62] POP R1
+1   ; [63]
+22  ; [64] JUMP 39      JMP inizio
+39  ; [65]
+;errore:
+12  ; [66] MOV R30 -1   R30 = -1
+30  ; [67]
+-1  ; [68]
+1   ; [69] DISPLAY R30  Stampa R30
+30  ; [70]
+;fine:
+0   ; [71] HALT         Fine programma

@@ -1,0 +1,308 @@
+; TEST OPERAZIONI
+; Serve ad eseguire dei test sulle istruzioni ADD, SUB, MUL e DIV. In particolare, i casi di overflow e underflow.
+; All'interno del programma in codice macchina sono presenti dei "bivi": in alcuni punti ci sono più istruzioni equivalenti fra loro; per abilitare test diversi, è necessario commentare tutte queste istruzioni tranne una; quella rimasta "attiva", sarà il test che cerrà eseguito lanciando il programma.
+
+; REGISTRI UTILIZZATI:
+; R0    primo registro di appoggio per eseguire dei calcoli
+; R1    secondo registro di appoggio per eseguire dei calcoli
+; R10   contiene i risultati delle operazioni (se sono andate a buon fine)
+
+217 ; numero linee di codice macchina
+
+;main:
+20  ; [0] CALL bivio
+;Test somma:
+;5   ; [1]                   CALL somma
+;Test sottrazione:
+43 ; [1]                   CALL sottrazione
+;Test moltiplicazione:
+;93 ; [1]                   CALL moltiplicazione
+;Test divisione:
+;179; [1]                   CALL divisione
+1   ; [2] DISPLAY R3        Stampa R3
+3   ; [3]
+0   ; [4] HALT
+
+;somma:
+22  ; [5] JMP bivio
+;somma normale:
+7   ; [6]                   JMP somma normale
+;somma overflow:
+;19 ; [6]                   JMP somma overflow
+;somma underflow:
+;31 ; [6]                   JMP somma underflow
+
+;somma normale:
+12  ; [7] MOV R0 n1         R0 = n1
+0   ; [8]
+1   ; [9]                   Modificare questa riga per modificare il primo addendo
+12  ; [10] MOV R1 n2        R1 = n2
+1   ; [11]
+1   ; [12]                  Modificare questa riga per modificare il secondo addendo
+30  ; [13] ADD R0 R1        R3 = R0 + R1
+0   ; [14]
+1   ; [15]
+11  ; [16] POP R3
+3   ; [17]
+21  ; [18] RET
+
+;somma overflow:
+12  ; [19] MOV R0 INT_MAX   R0 = 2147483647
+0   ; [20]
+2147483647 ; [21]
+12  ; [22] MOV R1 INT_MAX   R1 = 2147483647
+1   ; [23]
+2147483647 ; [24]
+30  ; [25] ADD R0 R1        R3 = R0 + R1
+0   ; [26]
+1   ; [27]
+11  ; [28] POP R3
+3   ; [29]
+21  ; [30] RET
+
+;somma underflow:
+12  ; [31] MOV R0 INT_MIN   R0 = -2147483648
+0   ; [32]
+-2147483648 ; [33]
+12  ; [34] MOV R1 INT_MIN   R1 = -2147483648
+1   ; [35]
+-2147483648 ; [36]
+30  ; [37] ADD R0 R1        R3 = R0 + R1
+0   ; [38]
+1   ; [39]
+11  ; [40] POP R3
+3   ; [41]
+21  ; [42] RET
+
+;sottrazione:
+22  ; [43] JMP bivio
+;sottrazione normale:
+45  ; [44]                  JMP sottrazione normale
+;sottrazione overflow:
+;57 ; [44]                  JMP sottrazione overflow
+;sottrazione underflow:
+;69 ; [44]                  JMP sottrazione underflow
+;sottraendo = INT_MIN:
+;81 ; [44]                  JMP sottraendo = INT_MIN
+
+;sottrazione normale:
+12  ; [45] MOV R0 n1        R0 = n1
+0   ; [46]
+1   ; [47]                  Modificare questa riga per modificare il minuendo
+12  ; [48] MOV R1 n2        R1 = n2
+1   ; [49]
+1   ; [50]                  Modificare questa riga per modificare il sottraendo
+31  ; [51] SUB R0 R1        R3 = R0 - R1
+0   ; [52]
+1   ; [53]
+11  ; [54] POP R3
+3   ; [55]
+21  ; [56] RET
+
+;sottrazione overflow:
+12  ; [57] MOV R0 INT_MAX   R0 = 2147483647
+0   ; [58]
+2147483647 ; [59]
+12  ; [60] MOV R1 INT_MIN   R1 = -2147483648
+1   ; [61]
+-2147483648 ; [62]
+31  ; [63] SUB R0 R1        R3 = R0 - R1
+0   ; [64]
+1   ; [65]
+11  ; [66] POP R3
+3   ; [67]
+21  ; [68] RET
+
+;sottrazione underflow:
+12  ; [69] MOV R0 INT_MIN   R0 = -2147483648
+0   ; [70]
+-2147483648 ; [71]
+12  ; [72] MOV R1 INT_MAX   R1 = 2147483647
+1   ; [73]
+2147483647 ; [74]
+31  ; [75] SUB R0 R1        R3 = R0 - R1
+0   ; [76]
+1   ; [77]
+11  ; [78] POP R3
+3   ; [79]
+21  ; [80] RET
+
+;sottraendo = INT_MIN:
+12  ; [81] MOV R0 0         R0 = 0
+0   ; [82]
+0   ; [83]
+12  ; [84] MOV R1 INT_MAX   R1 = -2147483648
+1   ; [85]
+-2147483648 ; [86]
+31  ; [87] SUB R0 R1        R3 = R0 - R1
+0   ; [88]
+1   ; [89]
+11  ; [90] POP R3
+3   ; [91]
+21  ; [92] RET
+
+;moltiplicazione:
+22  ; [93] JMP bivio
+;moltiplicazione normale:
+95  ; [94]                  JMP sottrazione normale
+;INT_MAX * INT_MAX:
+;107; [94]                  JMP sottrazione overflow
+;INT_MIN * INT_MIN:
+;119; [94]                  JMP sottrazione underflow
+;INT_MAX * INT_MIN:
+;131; [94]                  JMP sottrazione overflow
+;INT_MIN * INT_MAX:
+;143; [94]                  JMP sottrazione underflow
+;INT_MIN * (-1):
+;155; [94]                  JMP sottrazione underflow
+;(-1) * INT_MIN
+;167; [94]                  JMP sottrazione underflow
+
+;moltiplicazione normale:
+12  ; [95] MOV R0 n1        R0 = n1
+0   ; [96]
+1   ; [97]                  Modificare questa riga per modificare il primo fattore
+12  ; [98] MOV R1 n2        R1 = n2
+1   ; [99]
+1   ; [100]                 Modificare questa riga per modificare il primo fattore
+32  ; [101] MUL R0 R1       R3 = R0 - R1
+0   ; [102]
+1   ; [103]
+11  ; [104] POP R3
+3   ; [105]
+21  ; [106] RET
+
+;INT_MAX * INT_MAX:
+12  ; [107] MOV R0 INT_MAX  R0 = INT_MAX
+0   ; [108]
+2147483647 ; [109]
+12  ; [110] MOV R1 INT_MAX  R1 = INT_MAX
+1   ; [111]
+2147483647 ; [112]
+32  ; [113] MUL R0 R1       R3 = R0 - R1
+0   ; [114]
+1   ; [115]
+11  ; [116] POP R3
+3   ; [117]
+21  ; [118] RET
+
+;INT_MIN * INT_MIN:
+12  ; [119] MOV R0 INT_MIN  R0 = INT_MIN
+0   ; [120]
+-2147483648 ; [121]
+12  ; [122] MOV R1 INT_MIN  R1 = INT_MIN
+1   ; [123]
+-2147483648 ; [124]
+32  ; [125] MUL R0 R1       R3 = R0 - R1
+0   ; [126]
+1   ; [127]
+11  ; [128] POP R3
+3   ; [129]
+21  ; [130] RET
+
+;INT_MAX * INT_MIN:
+12  ; [131] MOV R0 INT_MAX  R0 = INT_MAX
+0   ; [132]
+2147483647 ; [133]
+12  ; [134] MOV R1 INT_MIN  R1 = INT_MIN
+1   ; [135]
+-2147483648 ; [136]
+32  ; [137] MUL R0 R1       R3 = R0 - R1
+0   ; [138]
+1   ; [139]
+11  ; [140] POP R3
+3   ; [141]
+21  ; [142] RET
+
+;INT_MIN * INT_MAX:
+12  ; [143] MOV R0 INT_MIN  R0 = INT_MIN
+0   ; [144]
+-2147483648 ; [145]
+12  ; [146] MOV R1 INT_MAX  R1 = INT_MAX
+1   ; [147]
+2147483647 ; [148]
+32  ; [149] MUL R0 R1       R3 = R0 - R1
+0   ; [150]
+1   ; [151]
+11  ; [152] POP R3
+3   ; [153]
+21  ; [154] RET
+
+;INT_MIN * (-1):
+12  ; [155] MOV R0 INT_MIN  R0 = INT_MIN
+0   ; [156]
+-2147483648 ; [157]
+12  ; [158] MOV R1 -1       R1 = -1
+1   ; [159]
+-1  ; [160]
+32  ; [161] MUL R0 R1       R3 = R0 - R1
+0   ; [162]
+1   ; [163]
+11  ; [164] POP R3
+3   ; [165]
+21  ; [166] RET
+
+;(-1) * INT_MIN:
+12  ; [167] MOV R0 -1       R0 = -1
+0   ; [168]
+-1  ; [169]
+12  ; [170] MOV R1 INT_MIN  R1 = INT_MIN
+1   ; [171]
+-2147483648 ; [172]
+32  ; [173] MUL R0 R1       R3 = R0 - R1
+0   ; [174]
+1   ; [175]
+11  ; [176] POP R3
+3   ; [177]
+21  ; [178] RET
+
+;divisione:
+22  ; [179] JMP bivio
+;divisione normale:
+181 ; [180]                 JMP divisione normale
+;INT_MIN / (-1):
+;193; [180]                 JMP INT_MIN / (-1)
+;divisore = 0:
+;205; [180]                 JMP divisore = 0
+
+;divisione normale:
+12  ; [181] MOV R0 1        R0 = 1
+0   ; [182]
+1   ; [183]                 Modificare questa riga per modificare il dividendo
+12  ; [184] MOV R1 1        R1 = 1
+1   ; [185]
+1   ; [186]                 Modificare questa riga per modificare il divisore
+32  ; [187] MUL R0 R1       R3 = R0 - R1
+0   ; [188]
+1   ; [189]
+11  ; [190] POP R3
+3   ; [191]
+21  ; [192] RET
+
+;INT_MIN / (-1):
+12  ; [193] MOV R0 1        R0 = 1
+0   ; [194]
+-2147483648 ; [195]
+12  ; [196] MOV R1 -1       R1 = -1
+1   ; [197]
+-1  ; [198]
+33  ; [199] DIV R0 R1       R3 = R0 - R1
+0   ; [200]
+1   ; [201]
+11  ; [202] POP R3
+3   ; [203]
+21  ; [204] RET
+
+;divisore = 0:
+12  ; [205] MOV R0 1        R0 = 1
+0   ; [206]
+1   ; [207]
+12  ; [208] MOV R1 0        R1 = 0
+1   ; [209]
+0   ; [210]
+33  ; [211] DIV R0 R1       R3 = R0 - R1
+0   ; [212]
+1   ; [213]
+11  ; [214] POP R3
+3   ; [215]
+21  ; [216] RET

@@ -1,0 +1,25 @@
+; TEST STACK
+; Serve ad eseguire dei test sulle istruzioni ADD, SUB, MUL e DIV. In particolare, i casi di overflow e underflow.
+; Alla riga [1] ci sono due comandi. Il primo è il test per lo stack pieno, l'altro per quello vuoto. Per eseguire correttamente uno dei due test è necessario commentare una delle due opzioni e lasciare attiva quella da eseguire.
+
+9   ; numero linee di codice macchina
+
+;main:
+20  ; [0] CALL bivio
+;Test stack pieno:
+3   ; [1]               CALL stack pieno
+;Test stack vuoto:
+;6  ; [1]               CALL stack vuoto
+0   ; [2] HALT
+
+;stack pieno:
+; Il programma che segue continua a richiamarsi fino a saturare lo stack.
+;ricorsione:
+20  ; [3] CALL 3        CALL ricorsione
+3   ; [4]
+21  ; [5] RET           Termine funzione
+
+;stack vuoto:
+11  ; [6] POP R0        POP in R0
+0   ; [7]
+21  ; [8] RET           Termine funzione

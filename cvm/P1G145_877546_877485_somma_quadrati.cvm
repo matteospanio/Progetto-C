@@ -1,0 +1,97 @@
+; SOMMA QUADRATI
+; Questo programma calcola la somma dei quadrati dei primi n numeri naturali (0, 1, 2, 3...).
+; Verranno stampati su console vari numeri:
+; (1) il numero n di numeri naturali di cui sommare i quadrati
+; (2) gli n numeri naturali da elevare al quadrato
+; (3) i quadrati degli n numeri naturali
+; (4) la somma dei quadrati
+; Nota (2) e (3): su console verranno visualizzati a righe alterne i numeri naturali e i loro quadrati. Non prima tutti i numeri naturali e poi tutti i quadrati.
+
+; TEST
+; Per provare il programma con altri valori di n modificare la riga [2].
+; La somma va in overflow per n >= 1862
+; Per n negativi, il programma restituisce come somma -1
+
+; REGISTRI UTILIZZATI:
+; R0    numero n di numeri naturali da sommare
+; R1    numero naturale da elevare al quadrato
+; R2    1, costante
+; R3    quadrati da sommare
+; R4    somma dei quadrati
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 10    PUSH
+; 11    POP
+; 12    MOV
+; 20    CALL
+; 21    RET
+; 22    JMP
+; 23    JZ
+; 25    JNEG
+; 30    ADD
+; 31    SUB
+; 32    MUL
+
+53  ; numero linee di codice macchina
+
+; main
+12  ; [0] MOV R0 n          R0 = n
+0   ; [1]
+7   ; [2]
+1   ; [3] DISPLAY R0        Stampa n
+0   ; [4]
+20  ; [5] CALL 10           CALL somma_naturali
+10  ; [6]
+1   ; [7] DISPLAY R4        Stampa R4
+4   ; [8]
+0   ; [9] HALT              Fine programma
+
+;somma_naturali:
+10  ; [10] PUSH R0          if R0 < 0
+0   ; [11]
+25  ; [12] JNEG 49          JMP errore
+49  ; [13]
+12  ; [14] MOV R1 0         R1 = 0
+1   ; [15]
+0   ; [16]
+12  ; [17] MOV R2 1         R2 = 1
+2   ; [18]
+1   ; [19]
+12  ; [20] MOV R3 0         R4 = 0
+4   ; [21]
+0   ; [22]
+;inizio
+31  ; [23] SUB R0 R1        if (R0 - R1) = 0
+0   ; [24]
+1   ; [25]
+23  ; [26] JZ 52            JMP fine
+52  ; [27]
+1   ; [28] DISPLAY R1       Stampa R1
+1   ; [29]
+32  ; [30] MUL R1 R1        R3 = R1 * R1
+1   ; [31]
+1   ; [32]
+11  ; [33] POP R3
+3   ; [34]
+1   ; [35] DISPLAY R3       Stampa R3
+3   ; [36]
+30  ; [37] ADD R4 R3        R4 = R4 + R3
+4   ; [38]
+3   ; [39]
+11  ; [40] POP R4
+4   ; [41]
+30  ; [42] ADD R1 R2        R1 = R1 + R2
+1   ; [43]
+2   ; [44]
+11  ; [45] POP R1
+1   ; [46]
+22  ; [47] JMP 23           JMP inizio
+23  ; [48]
+;errore:
+12  ; [49] MOV R4 -1        R4 = -1
+4   ; [50]
+-1  ; [51]
+;fine:
+21  ; [52] RET              Termine funzione

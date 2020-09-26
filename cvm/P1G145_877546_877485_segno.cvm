@@ -1,0 +1,64 @@
+; SEGNO
+; Questo programma determina se un numero n è positivo o meno.
+; Verranno stampati su console vari numeri:
+; (1) il numero n da analizzare
+; (2) 1 se è positivo, -1 se negativo, 0 se uguale a 0
+
+; TEST
+; Per cambiare il numero n da analizzare modificare la riga [2].
+
+; REGISTRI UTILIZZATI:
+; R0    numero n da valutare
+; R15   1 se è positivo, -1 se negativo, 0 se uguale a 0
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 10    PUSH
+; 12    MOV
+; 20    CALL
+; 21    RET
+; 22    JMP
+; 24    JPOS
+; 25    JNEG
+
+32  ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 n      R0 = n
+0   ; [1]
+7   ; [2]
+1   ; [3] DISPLAY R0    Stampa R0
+0   ; [4]
+20  ; [5] CALL 10       CALL segno
+10  ; [6]
+1   ; [7] DISPLAY R15   Stampa R15
+15  ; [8]
+0   ; [9] HALT          Fine programma
+
+;segno:
+10  ; [10] PUSH R0      if R0 < 0
+0   ; [11]
+25  ; [12] JNEG 23      JMP negativo
+23  ; [13]
+10  ; [14] PUSH R0      if R0 > 0
+0   ; [15]
+24  ; [16] JPOS 28      JMP positivo
+28  ; [17]
+12  ; [18] MOV R15 0    R15 = 0
+15  ; [19]
+0   ; [20]
+22  ; [21] JMP 31       JMP fine
+28  ; [22]
+;negativo:
+12  ; [23] MOV R15 -1   R15 = -1
+15  ; [24]
+-1  ; [25]
+22  ; [26] JMP 31       JMP fine
+31  ; [27]
+;positivo:
+12  ; [28] MOV R15 1    R15 = 1
+15  ; [29]
+1   ; [30]
+;fine:
+21  ; [31] RET          Termine funzione

@@ -1,0 +1,43 @@
+; TEST PRINT STACK
+; Questo programma serve a verificare il corretto funzionamento dell'istruzione PRINT_STACK.
+; La prima parte del programma serve a salvare 10 numeri (da 0 a 9) nello stack. Alla fine, viene usata l'istruzione PRINT_STACK per stampare (a) gli ultimi 7 elementi caricati e (b) gli ultimi 20 elementi caricati.
+; Nel caso in cui si cerchi di stampare con PRINT_STACK più elementi di quelli contenuti nello stack, il programma dovrebbe segnalare la cosa e proseguire, senza interrompersi. Le due istruzioni di PRINT_STACK sono separate da un DISPLAY 100.
+; Per verificare che il programma è arrivato a termine senza interrompersi, stampa un valore finale (100).
+
+33   ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 0      R0 = 0
+0   ; [1]
+0   ; [2]
+12  ; [3] MOV R1 1      R1 = 1
+1   ; [4]
+1   ; [5]
+12  ; [6] MOV R2 10     R2 = 10
+2   ; [7]
+10  ; [8]
+;inizio:
+10  ; [9] PUSH R0       PUSH R0
+0   ; [10]
+30  ; [11] ADD R0 R1    R0 = R0 + R1
+0   ; [12]
+1   ; [13]
+11  ; [14] POP R0
+0   ; [15]
+31  ; [16] SUB R2 R0    if (R2 - R0)
+2   ; [17]
+0   ; [18]
+24  ; [19] JPOS 9       JMP inizio
+9   ; [20]
+2   ; [21] PRINT_STACK 7
+7   ; [22]
+12  ; [23] MOV R20 100  R20 = 100
+20  ; [24]
+100 ; [25]
+1   ; [26] DISPLAY R20  Stampa R20
+20  ; [27]
+2   ; [28] PRINT_STACK 20
+20  ; [29]
+1   ; [30] DISPLAY R20  Stampa R20
+20  ; [31]
+0   ; [32] HALT         Fine programma

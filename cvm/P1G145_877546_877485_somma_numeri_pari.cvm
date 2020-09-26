@@ -1,0 +1,72 @@
+; SOMMA NUMERI PARI
+; Questo programma calcola la somma di tutti i numeri naturali (0, 1, 2, 3...) minori o uguali a n.
+; Verranno stampati su console vari numeri:
+; (1) il numero n
+; (2) la somma dei numeri pari minori o uguali a n
+
+; TEST
+; Per provare il programma con altri valori di n modificare la riga [2].
+; Il calcolo va in overflow per n >= 92.682
+
+; REGISTRI UTILIZZATI:
+; R0    numero n di cui calcolare il fattoriale
+; R1    numeri naturali da moltiplicare per determinare il fattoriale
+; R20   1, costante
+; R30   fattoriale
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 11    POP
+; 12    MOV
+; 20    CALL
+; 21    RET
+; 22    JMP
+; 24    JPOS
+; 30    ADD
+; 31    SUB
+
+37  ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 n      R0 = n
+0   ; [1]
+7   ; [2]
+1   ; [3] DISPLAY R2    Stampa R2
+0   ; [4]
+20  ; [5] CALL 10       CALL somma_pari
+10  ; [6]
+1   ; [7] DISPLAY R2    Stampa R2
+2   ; [8]
+0   ; [9] HALT          Fine programma
+
+;somma_pari:
+12  ; [10] MOV R1 2     R1 = 2
+1   ; [11]
+2   ; [12]
+12  ; [13] MOV R2 0     R2 = 0
+2   ; [14]
+0   ; [15]
+12  ; [16] MOV R3 2     R3 = 2
+3   ; [17]
+2   ; [18]
+;inizio:
+31  ; [19] SUB R1 R0    if (R1 - R0) > 0
+1   ; [20]
+0   ; [21]
+24  ; [22] JPOS 36      JMP fine
+36  ; [23]
+30  ; [24] ADD R2 R1    R2 = R2 + R1
+2   ; [25]
+1   ; [26]
+11  ; [27] POP R2
+2   ; [28]
+30  ; [29] ADD R1 R3    R1 = R1 + R3
+1   ; [30]
+3   ; [31]
+11  ; [32] POP R1
+1   ; [33]
+22  ; [34] JMP 19       JMP inizio
+19  ; [35]
+;fine:
+21  ; [36] RET

@@ -1,0 +1,92 @@
+; IS_PRIME
+; Questo programma verifica se un numero è primo oppure no.
+; Un numero è primo se divisibile solo per 1 e per sè stesso. Questo programma prova a dividere il numero n per tutti i numeri da 2 a n-1 e, se una di queste divisioni ha risultato pari a zero, il numero n non è primo.
+; Verranno stampati su console 2 numeri:
+; (1) il numero n da analizzare
+; (2) 1 se è primo, 0 in caso contrario
+
+; REGISTRI UTILIZZATI:
+; R0    numero n da valutare
+; R1    valutazione di R0, se è primo o meno
+; R2    registro di appoggio per eseguire dei calcoli
+; R3    1, costante
+; R4    registro di appoggio per eseguire dei calcoli
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 11    POP
+; 12    MOV
+; 20    CALL
+; 21    RET
+; 22    JMP
+; 23    JZ
+; 25    JNEG
+; 30    ADD
+; 31    SUB
+; 32    MUL
+; 33    DIV
+
+55  ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 n          R0 = n
+0   ; [1]
+1   ; [2]
+1   ; [3] DISPLAY R0        Stampa n
+0   ; [4]
+20  ; [5] CALL 10           CALL is_prime
+10  ; [6]
+1   ; [7] DISPLAY R1        Stampa R1
+1   ; [8]
+0   ; [9] HALT              Fine programma
+
+;is_prime:
+12  ; [10] MOV R1 1         R1 = 1
+1   ; [11]
+1   ; [12]
+12  ; [13] MOV R2 2         R2 = 2
+2   ; [14]
+2   ; [15]
+12  ; [16] MOV R3 1         R3 = 1
+3   ; [17]
+1   ; [18]
+31  ; [19] SUB R0 R2        if (R0 - R2) < 0
+0   ; [20]
+2   ; [21]
+25  ; [22] JNEG 51          JMP no_prime
+51  ; [23]
+;inizio:
+31  ; [24] SUB R0 R2        if (R0 - R2) = 0
+0   ; [25]
+2   ; [26]
+23  ; [27] JZ 54            JMP fine
+54  ; [28]
+33  ; [29] DIV R0 R2        R4 = R0 / R2
+0   ; [30]
+2   ; [31]
+11  ; [32] POP R4
+4   ; [33]
+32  ; [34] MUL R4 R2        R4 = R4 * R2
+4   ; [35]
+2   ; [36]
+11  ; [37] POP R4
+4   ; [38]
+31  ; [39] SUB R0 R4        if (R0 - R4) = 0
+0   ; [40]
+4   ; [41]
+23  ; [42] JZ 51            JMP no_prime
+51  ; [43]
+30  ; [44] ADD R2 R3        R2 = R2 + R3
+2   ; [45]
+3   ; [46]
+11  ; [47] POP R2
+2   ; [48]
+22  ; [49] JMP 24           JMP inizio
+24  ; [50]
+;no_prime:
+12  ; [51] MOV R1 0         R1 = 0
+1   ; [52]
+0   ; [53]
+;fine:
+21  ; [54] RET

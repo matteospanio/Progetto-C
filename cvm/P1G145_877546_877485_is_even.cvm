@@ -1,0 +1,71 @@
+; IS_EVEN
+; Questo programma determina se un numero è pari o dispari.
+; Verranno stampati su console vari numeri:
+; (1) il numero n da valutare
+; (2) 1 se è pari, 0 altrimenti
+
+; TEST
+; Per provare altri valori di n, modificare la riga [2]
+
+; REGISTRI UTILIZZATI:
+; R0    numero n da valutare
+; R1    2, costante
+; R2    variabile di appoggio per dei conti
+; R3    variabile di appoggio per dei conti
+; R31   1 se n è pari, 0 altrimenti
+
+; ISTRUZIONI UTILIZZATE (e quindi testate) all'interno di questo programma:
+; 0     HALT
+; 1     DISPLAY
+; 11    POP
+; 12    MOV
+; 20    CALL
+; 21    RET
+; 23    JZ
+; 31    SUB
+; 32    MUL
+; 33    DIV
+
+36  ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 n      R0 = n
+0   ; [1]
+7   ; [2]
+1   ; [3] DISPLAY R0    Stampa R0
+0   ; [4]
+20  ; [5] CALL 10       CALL isEven
+10  ; [6]
+1   ; [7] DISPLAY R31   Stampa R31
+31  ; [8]
+0   ; [9] HALT          Fine programma
+
+;isEven:
+12  ; [10] MOV R1 2     R1 = 2
+1   ; [11]
+2   ; [12]
+33  ; [13] DIV R0 R1    R2 = R0 / R1
+0   ; [14]
+1   ; [15]
+11  ; [16] POP R2
+2   ; [17]
+32  ; [18] MUL R2 R1    R3 = R1 * R2
+2   ; [19]
+1   ; [20]
+11  ; [21] POP R3
+3   ; [22]
+31  ; [23] SUB R0 R3    if (R0 - R3) = 0
+0   ; [24]
+3   ; [25]
+23  ; [26] JZ 32        JMP pari
+32  ; [27]
+;dispari:
+12  ; [28] MOV R31 0    R31 = 0
+31  ; [29]
+0   ; [30]
+21  ; [31] RET          Termine funzione
+;pari:
+12  ; [32] MOV R31 1    R31 = 1
+31  ; [33]
+1   ; [34]
+21  ; [35] RET          Termine funzione

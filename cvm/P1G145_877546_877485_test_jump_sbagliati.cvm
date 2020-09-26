@@ -1,0 +1,69 @@
+; TEST JUMP SBAGLIATI
+; Questo programma serve a mostrare cosa succede se le istruzioni che eseguono dei salti (CALL, JMP, JZ, JPOS e JNEG) hanno un parametro errato che non punta a nessuan istruzione.
+
+; Per come è scritto questo programma, la macchina virtuale dovrebbe rilevare degli errori alla riga [22] e [27].
+; Per vedere cosa succede se un'istruzione di salto punta ad un numero esterno al programma (es: CALL -7 o JMP 777), la riga [5] o comunque un'istruzione di salto. In questo caso il programma segnala questo problema e si interrompe prima di valutare il tipo di problema a riga [22] e [27].
+
+55  ; numero linee di codice macchina
+
+;main:
+12  ; [0] MOV R0 n          R0 = n
+0   ; [1]
+1   ; [2]
+1   ; [3] DISPLAY R0        Stampa n
+0   ; [4]
+20  ; [5] CALL 10           CALL is_prime
+10  ; [6]
+1   ; [7] DISPLAY R1        Stampa R1
+1   ; [8]
+0   ; [9] HALT              Fine programma
+
+;is_prime:
+12  ; [10] MOV R1 1         R1 = 1
+1   ; [11]
+1   ; [12]
+12  ; [13] MOV R2 2         R2 = 2
+2   ; [14]
+2   ; [15]
+12  ; [16] MOV R3 1         R3 = 1
+3   ; [17]
+1   ; [18]
+31  ; [19] SUB R0 R2        if (R0 - R2) < 0
+0   ; [20]
+2   ; [21]
+25  ; [22] JNEG 51          JMP no_prime <-- modificato a istr 20
+20  ; [23]
+;inizio:
+31  ; [24] SUB R0 R2        if (R0 - R2) = 0
+0   ; [25]
+2   ; [26]
+23  ; [27] JZ 54            JMP fine <-- modificato a 25
+25  ; [28]
+33  ; [29] DIV R0 R2        R4 = R0 / R2
+0   ; [30]
+2   ; [31]
+11  ; [32] POP R4
+4   ; [33]
+32  ; [34] MUL R4 R2        R4 = R4 * R2
+4   ; [35]
+2   ; [36]
+11  ; [37] POP R4
+4   ; [38]
+31  ; [39] SUB R0 R4        if (R0 - R4) = 0
+0   ; [40]
+4   ; [41]
+23  ; [42] JZ 51            JMP no_prime
+51  ; [43]
+30  ; [44] ADD R2 R3        R2 = R2 + R3
+2   ; [45]
+3   ; [46]
+11  ; [47] POP R2
+2   ; [48]
+22  ; [49] JMP 24           JMP inizio
+24  ; [50]
+;no_prime:
+12  ; [51] MOV R1 0         R1 = 0
+1   ; [52]
+0   ; [53]
+;fine:
+21  ; [54] RET

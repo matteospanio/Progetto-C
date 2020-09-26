@@ -1,0 +1,33 @@
+; PROGRAMMA INCOMPLETO
+; Il programma in codice macchina completo è composto da 21 linee.
+; Se anziché scrivere 21, proviamo ad inserire un numero più grande, la macchina virtuale si accorge che il file contiene meno istruzioni di quelle dichiarate.
+; Se invece proviamo ad inserire un numero più piccolo, la macchina virtuale non acquisirà tutto il programma e, in fase di esecuzione, non otterremo i risultati attesi.
+; Nel caso del numero più piccolo, se l'ultima istruzione del programma non trova tutti i parametri necessari al suo funzionamento, il programma segnala la cosa e si interrompe prima di venire eseguito/stampato.
+
+;9  ; numero scorretto (più piccolo) (l'ultima istruzione non ha tutti i parametri) di linee di codice macchina
+;10 ; numero scorretto (più piccolo) (tutte le istruzioni hanno dei parametri) di linee di codice macchina
+;21 ; numero corretto di linee di codice macchina (Il programma stampa su console i numeri da 0 a 3)
+30  ; numero scorretto (più grande) di linee di codice macchina
+
+; main:
+12  ; [0] MOV R0 0          R0 = 0
+0   ; [1]
+0   ; [2]
+1   ; [3] DISPLAY R0        Stampa R0
+0   ; [4]
+12  ; [5] MOV R1 1          R1 = 1
+1   ; [6]
+1   ; [7]
+1   ; [8] DISPLAY R1        Stampa R1
+1   ; [9]
+12  ; [10] MOV R2 2         R2 = 2
+2   ; [11]
+2   ; [12]
+1   ; [13] DISPLAY R2       Stampa R2
+2   ; [14]
+12  ; [15] MOV R3 3         R3 = 3
+3   ; [16]
+3   ; [17]
+1   ; [18] DISPLAY R3       Stampa R3
+3   ; [19]
+0   ; [20] HALT
