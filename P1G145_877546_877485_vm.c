@@ -40,18 +40,15 @@
  argc invece dovrebbe corrispondere al numero di parametri passati ma, per il motivo appena citato, lanciando correttamente il programma verranno conteggiati 3 parametri e non 2.
  */
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
     int errori = 0;
 
     /* Verifica numero di parametri digitati lanciando il programma */
     /* Ci sono più parametri del necessario: uso i primi due ignorando il resto */
-    if ((argc - 1) > 2)
-    {
+    if ((argc - 1) > 2) {
         printf("\nSono stati digitati più parametri (%d) del previsto; valuterò solo i primi 2, ignorando il resto.\n", (argc - 1));
         /* I parametri non sono sufficienti: il programma si ferma */
-    } else if ((argc - 1) < 2)
-    {
+    } else if ((argc - 1) < 2) {
         printf("\nSono stati digitati meno parametri (%d) del previsto. Per funzionare correttamente ho bisogno di almeno 2 parametri.\nIl primo deve essere \"esegui\" o \"stampa\".\nIl secondo è il nome del file contenente un programma in linguaggio macchina.\nRichiamatemi con tutti i parametri necessari.\n\n", (argc - 1));
         return errore_pochi_parametri;
     }
@@ -60,16 +57,13 @@ int main(int argc, char const *argv[])
 
     /* Controlliamo che tipo di operazione devo eseguire con il file in input e richiamiamo la relativa funzione: */
     /* Esegui */
-    if (strcmp(argv[1], "esegui") == 0)
-    {
+    if (strcmp(argv[1], "esegui") == 0) {
         errori = esegui(argv[2]);
     /* Stampa */
-    } else if (strcmp(argv[1], "stampa") == 0)
-    {
+    } else if (strcmp(argv[1], "stampa") == 0) {
         errori = stampa(argv[2]);
     /* Se il parametro ricevuto non è corretto: */
-    } else
-    {
+    } else {
         printf("\nOperazione non riconosciuta, rilanciatemi digitando \"stampa\" oppure \"esegui\".\n\n");
         errori = operazione_non_riconosciuta;
     }

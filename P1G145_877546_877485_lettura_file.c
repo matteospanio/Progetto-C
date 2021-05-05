@@ -23,8 +23,7 @@
 
 #include "P1G145_877546_877485_lettura_file.h"
 
-int lettura_file(const char *file_input, int **programma, unsigned int *numero_istruzioni, int comando)
-{
+int lettura_file(const char *file_input, int **programma, unsigned int *numero_istruzioni, int comando) {
     /* Variabili necessarie al corretto funzionamento di getline */
     char *line_t = NULL;        /* Conterrà la stringa ricevuta */
     size_t line_t_size = 0;     /* Lunghezza stringa ricevuta */
@@ -50,8 +49,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
     printf("\nMi avete chiesto di elaborare il file: %s\n", file_input);
 
     /* File non trovato */
-    if (input == NULL)
-    {
+    if (input == NULL) {
         printf("\nNon trovo il file.\n");
         return file_inesistente;
     }
@@ -62,8 +60,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
      Acquisisce una alla volta tutte le righe del file di input. Nel momento in cui trova un numero, il valore di dim viene modificato e il ciclo termina.
      Questo ciclo serve ad acquisire il primo numero contenuto nel file di input.
      */
-    while ((dim == 0) && (line_lenght = getline(&line_t, &line_t_size, input)) && (line_lenght >= 0))
-    {
+    while ((dim == 0) && (line_lenght = getline(&line_t, &line_t_size, input)) && (line_lenght >= 0)) {
         /* Il file di input dovrebbe avere ogni riga delimitata esclusivamente da '\n'. Quindi, ogni volta che getline va a buon fine abbiamo una nuova riga del file e incrementiamo linee di 1 */
         linee++;
 
@@ -74,15 +71,13 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
 
         /* Scorriamo tutta la stringa */
         /* Il ciclo termina se siamo arrivati alla fine della stringa o se abbiamo trovato dei commenti (e quindi non ci interessa il resto). */
-        while ((line_t[++i] != ';') && (line_t[i] != '\0'))
-        {
+        while ((line_t[++i] != ';') && (line_t[i] != '\0')) {
             /*
              Se il file di input contiene errori il programma si interrompe segnalando un errore.
              La condizione è che il carattere con indice i NON sia un numero, ' ', '\0' o ';', '\n', '\r'.
              Il simbolo '-' è fra quelli non accettati perché stiamo acquisendo il primo numero che indica quante istruzioni ci sono nel file di input, quindi può essere solo positivo.
              */
-            if ((line_t[i] != ' ') && (line_t[i] != '\0') && (line_t[i] != ';') && (line_t[i] != '\n') && (line_t[i] != '\r') && ((line_t[i] < '0') || (line_t[i] > '9')))
-            {
+            if ((line_t[i] != ' ') && (line_t[i] != '\0') && (line_t[i] != ';') && (line_t[i] != '\n') && (line_t[i] != '\r') && ((line_t[i] < '0') || (line_t[i] > '9'))) {
                 printf("\nHo trovato un carattere (posizione %d) non valido alla riga %ld del file di input. Assicurati che ';' sia presente su ogni commento o che non ci siano altri errori. Il primo numero (che indica la lunghezza del programma) dev'essere strettamente positivo.\n", i, linee);
                 fclose(input);
                 free(line_t);
@@ -101,8 +96,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
             /* Individuiamo l'ultima cifra di un numero
              La condizione è che il carattere con indice i sia un numero e quello successivo (i + 1) no.
              */
-            if (((line_t[i + 1] == ' ') || (line_t[i + 1] == ';') || (line_t[i + 1] == '\n') || (line_t[i + 1] == '\r') || (line_t[i + 1] == '\0')) && ((line_t[i] >= '0') && (line_t[i] <= '9')))
-            {
+            if (((line_t[i + 1] == ' ') || (line_t[i + 1] == ';') || (line_t[i + 1] == '\n') || (line_t[i + 1] == '\r') || (line_t[i + 1] == '\0')) && ((line_t[i] >= '0') && (line_t[i] <= '9'))) {
                 /* Abbiamo trovato il numero che stavo cercando: segnalo che una volta finita l'acquisizione, devo smettere di leggere il file */
                 dim = 1;
 
@@ -115,8 +109,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
                 numero_da_convertire = (char *)malloc(sizeof(char) * (cifre_numero + 1));
 
                 /* Se la malloc non è andata a buon fine */
-                if (numero_da_convertire == NULL)
-                {
+                if (numero_da_convertire == NULL) {
                     printf("\nErrore durante l'allocazione di memoria dinamica.\n");
                     fclose(input);
                     free(line_t);
@@ -127,8 +120,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
                  Copiamo una ad una le cifre del numero in numero_da_convertire
                  inizio_numero è l'indice della prima cifra del numero da salvare; i è quello dell'ultima.
                  */
-                for (j = inizio_numero; j <= i; j++)
-                {
+                for (j = inizio_numero; j <= i; j++) {
                     numero_da_convertire[j - inizio_numero] = line_t[j];
                 }
                 /* Aggiungiamo il carattere di fine stringa */
@@ -138,8 +130,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
     }
 
     /* Se siamo arrivati alla fine del file senza trovare alcun numero */
-    if (line_lenght < 0)
-    {
+    if (line_lenght < 0) {
         printf("\nIl file è vuoto.\n\n");
         fclose(input);
         free(line_t);
@@ -152,14 +143,12 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
     free(numero_da_convertire);
 
     /* Verifica sul primo numero contenuto nel file. Se troppo grande il programma si arresta, altrimenti lo salva in numero_istruzioni e prosegue. */
-    if (dimensioni_programma > UINT_MAX)
-    {
+    if (dimensioni_programma > UINT_MAX) {
         printf("\nIl primo numero del file (indicante il numero di istruzioni che compongono il programma in linguaggio macchina) è troppo grande: dev'essere compreso fra 0 e %d\n\n", UINT_MAX);
         fclose(input);
         free(line_t);
         return primo_valore_errato;
-    } else
-    {
+    } else {
         *numero_istruzioni = (unsigned int) dimensioni_programma;
     }
 
@@ -167,8 +156,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
     programma_input = (long *)malloc(sizeof(long) * (*numero_istruzioni));
 
     /* Se la malloc non è andata a buon fine */
-    if (numero_da_convertire == NULL)
-    {
+    if (numero_da_convertire == NULL) {
         printf("\nErrore durante l'allocazione di memoria dinamica.\n");
         fclose(input);
         free(line_t);
@@ -177,8 +165,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
 
     /* Acquisisce una alla volta i codici macchina del file di input. Nel momento in cui trova un numero, lo salva nel vettore programma_input[]. Il numero acquisito nel ciclo while precedente indica quanti numeri dobbiamo acquisire in questo. Se il file di input contiene meno numeri di quelli attesi, il programma termina con un errore; se ce ne sono di più, gli ultimi vengono ignorati.
      */
-    while ((z < *numero_istruzioni) && (line_lenght = getline(&line_t, &line_t_size, input)) && (line_lenght >= 0))
-    {
+    while ((z < *numero_istruzioni) && (line_lenght = getline(&line_t, &line_t_size, input)) && (line_lenght >= 0)) {
         /* Il file di input dovrebbe avere ogni riga delimitata esclusivamente da '\n'. Quindi, ogni volta che getline va a buon fine abbiamo una nuova riga del file e incrementiamo linee di 1 */
         linee++;
 
@@ -189,14 +176,12 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
 
         /* Scorriamo tutta la stringa */
         /* Il ciclo termina se siamo arrivati alla fine della stringa o se abbiamo trovato dei commenti (e quindi non ci interessa il resto). */
-        while ((line_t[++i] != ';') && (line_t[i] != '\0'))
-        {
+        while ((line_t[++i] != ';') && (line_t[i] != '\0')) {
             /*
              Se il file di input contiene errori il programma si interrompe segnalando un errore.
              La condizione è che il carattere con indice i NON sia un numero, ' ', '\0' o ';', '\n', '\r', '-'.
              */
-            if ((line_t[i] != ' ') && (line_t[i] != '\0') && (line_t[i] != ';') && (line_t[i] != '\n') && (line_t[i] != '\r') && (line_t[i] != '-') && ((line_t[i] < '0') || (line_t[i] > '9')))
-            {
+            if ((line_t[i] != ' ') && (line_t[i] != '\0') && (line_t[i] != ';') && (line_t[i] != '\n') && (line_t[i] != '\r') && (line_t[i] != '-') && ((line_t[i] < '0') || (line_t[i] > '9'))) {
                 printf("\nHo trovato un carattere (posizione %d) non valido alla riga %ld del file di input. Assicurati che ';' sia presente su ogni commento o che non ci siano altri errori.\n", i, linee);
                 fclose(input);
                 free(programma_input);
@@ -205,8 +190,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
             }
 
             /* Se troviamo un simbolo '-' seguito da qualcosa che non è un numero */
-            if ((line_t[i] == '-') && ((line_t[i + 1] < '0') || (line_t[i + 1] > '9')))
-            {
+            if ((line_t[i] == '-') && ((line_t[i + 1] < '0') || (line_t[i + 1] > '9'))) {
                 printf("\nHo trovato un carattere (posizione %d) non valido alla riga %ld del file di input. Assicurati che ';' sia presente su ogni commento o che non ci siano altri errori. Fra il simbolo negativo '-' e il relativo numero non devono essere presenti spazi.\n", i, linee);
                 fclose(input);
                 free(programma_input);
@@ -226,8 +210,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
             /* Individuiamo l'ultima cifra di un numero
              La condizione è che il carattere con indice i sia un numero e quello successivo (i + 1) no.
              */
-            if (((line_t[i + 1] == ' ') || (line_t[i + 1] == ';') || (line_t[i + 1] == '\n') || (line_t[i + 1] == '\r') || (line_t[i + 1] == '\0')) && ((line_t[i] >= '0') && (line_t[i] <= '9')))
-            {
+            if (((line_t[i + 1] == ' ') || (line_t[i + 1] == ';') || (line_t[i + 1] == '\n') || (line_t[i + 1] == '\r') || (line_t[i + 1] == '\0')) && ((line_t[i] >= '0') && (line_t[i] <= '9'))) {
                 /* Calcoliamo il numero di cifre che compongono il numero
                  inizio_numero è l'indice della prima cifra del numero da salvare; i è quello dell'ultima. */
                 cifre_numero = i - inizio_numero + 1;
@@ -237,8 +220,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
                 numero_da_convertire = (char *)malloc(sizeof(char) * (cifre_numero + 1));
 
                 /* Se la malloc non è andata a buon fine */
-                if (numero_da_convertire == NULL)
-                {
+                if (numero_da_convertire == NULL) {
                     printf("\nErrore durante l'allocazione di memoria dinamica.\n");
                     fclose(input);
                     free(line_t);
@@ -250,9 +232,8 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
                  inizio_numero è l'indice della prima cifra del numero da salvare; i è quello dell'ultima.
                  */
                 for (j = inizio_numero; j <= i; j++)
-                {
                     numero_da_convertire[j - inizio_numero] = line_t[j];
-                }
+
                 /* Aggiungiamo il carattere di fine stringa */
                 numero_da_convertire[cifre_numero] = '\0';
 
@@ -273,8 +254,7 @@ int lettura_file(const char *file_input, int **programma, unsigned int *numero_i
     fclose(input);
 
     /* Se siamo arrivati alla fine del file senza trovare tutti i numeri attesi */
-    if (line_lenght < 0)
-    {
+    if (line_lenght < 0) {
         printf("\nIl programma in codice macchina è incompleto: ho trovato %ld su %d\n\n", z, (*numero_istruzioni));
         return programma_incompleto;
     }
